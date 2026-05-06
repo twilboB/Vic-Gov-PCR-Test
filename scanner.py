@@ -77,12 +77,13 @@ def convert_file_to_text(path: Path) -> tuple[str, str | None]:
 # ── Gemini scan call ──────────────────────────────────────────────────────────
 
 def _extract_json(raw: str) -> dict:
-    """Strip markdown fences if present and parse JSON."""
-    text = raw.strip()
-    # Remove ```json ... ``` or ``` ... ```
-    text = re.sub(r"^```(?:json)?\s*", "", text)
-    text = re.sub(r"\s*```$", "", text)
-    return json.loads(text)
+    """Extract and parse the first complete JSON object from a Gemini response."""
+    # Find the outermost { ... } block — handles preamble text and markdown fences
+    start = raw.find("{")
+    end = raw.rfind("}")
+    if start == -1 or end == -1:
+        raise json.JSONDecodeError("No JSON object found in response", raw, 0)
+    return json.loads(raw[start:end + 1])
 
 
 def scan_file(path: Path, model: GenerativeModel | None = None) -> dict:

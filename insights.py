@@ -24,10 +24,12 @@ def _init_vertex():
 
 
 def _extract_json(raw: str) -> dict:
-    text = raw.strip()
-    text = re.sub(r"^```(?:json)?\s*", "", text)
-    text = re.sub(r"\s*```$", "", text)
-    return json.loads(text)
+    """Extract and parse the first complete JSON object from a Gemini response."""
+    start = raw.find("{")
+    end = raw.rfind("}")
+    if start == -1 or end == -1:
+        raise json.JSONDecodeError("No JSON object found in response", raw, 0)
+    return json.loads(raw[start:end + 1])
 
 
 def group_results_by_channel(scan_results: list[dict]) -> dict[str, list[dict]]:
