@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+.venv/
+venv/
+output/*.xlsx
+templates/PCR_BLANK_TEMPLATE.xlsx
+*.egg-info/
+.DS_Store
