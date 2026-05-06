@@ -5,6 +5,5 @@ __pycache__/
 .venv/
 venv/
 output/*.xlsx
-templates/PCR_BLANK_TEMPLATE.xlsx
 *.egg-info/
 .DS_Store

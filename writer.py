@@ -19,7 +19,7 @@ from openpyxl.utils import column_index_from_string
 
 from mapper import map_grounding_dict, map_commentary, map_summary_fields
 
-TEMPLATE_PATH = Path(__file__).parent / "templates" / "PCR_BLANK_TEMPLATE.xlsx"
+TEMPLATE_PATH = Path(__file__).parent / "templates" / "OMD - PCR - Tier B and C Template 1 (1).xlsx"
 
 # Columns that are always formula-calculated in Direct Digi Data — never write
 DIGI_FORMULA_COLS = {"J", "K"}
@@ -130,10 +130,7 @@ def write_pcr(
             if ws:
                 _write_cell(ws, sheet_name, cell_ref, value, log)
 
-        # Track metrics in grounding dict with no cell mapping
-        mapped_keys = {f"{m}_{v}".lower() for sheet, cell, val in metric_writes for m in [""]}
-        # Simple check: any grounding dict key not covered by map_grounding_dict
-        all_mapped_cells = {cell for _, cell, _ in metric_writes}
+        # Log grounding dict keys that produced no cell writes
         if not metric_writes and grounding_dict:
             log["unmapped"].extend(
                 [f"{channel}: {k}" for k in grounding_dict.keys()]
